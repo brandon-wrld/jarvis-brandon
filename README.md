@@ -1,79 +1,98 @@
 # 🤖 JARVIS
 
-> **Your personal AI assistant — built to understand, automate, and help you get things done.**
+<p align="center">
+  <strong>Your Personal AI Assistant</strong><br>
+  Think • Understand • Automate • Execute
+</p>
 
-JARVIS is a Python-powered personal AI assistant designed to combine **AI conversation, voice interaction, computer automation, browser control, web search, file processing, and developer assistance** into one intelligent assistant.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.13-blue?style=for-the-badge&logo=python" alt="Python 3.13">
+  <img src="https://img.shields.io/badge/AI-Powered-purple?style=for-the-badge" alt="AI Powered">
+  <img src="https://img.shields.io/badge/Platform-Windows-success?style=for-the-badge&logo=windows" alt="Windows">
+</p>
+
+---
+
+## 🧠 What is JARVIS?
+
+**JARVIS** is a Python-powered personal AI assistant designed to combine **AI conversation, voice interaction, computer automation, browser control, web search, file processing, and developer assistance** into one intelligent assistant.
+
+> ⚡ For the complete JARVIS experience, run it locally on your Windows computer.
 
 ---
 
 ## ✨ Features
 
-- 🧠 AI-powered conversations
-- 🎙️ Voice interaction
-- 💻 Computer automation
-- 🖱️ Mouse and keyboard control
-- 🖥️ Screen interaction
-- 🌐 Browser automation
-- 🔎 Web searching
-- 📁 File and document processing
-- 👨‍💻 Coding assistance
-- 📺 YouTube tools
-- 🔔 Reminders
-- 🧠 Memory and task management
-- 🔐 Gemini and OpenRouter support
+| Feature | Description |
+|---|---|
+| 🧠 **AI Assistant** | Natural-language conversations and intelligent responses |
+| 🎙️ **Voice Control** | Voice input and text-to-speech |
+| 🖥️ **Desktop Control** | Interact with your computer |
+| 🖱️ **Mouse & Keyboard** | Automate mouse and keyboard actions |
+| 🌐 **Browser Automation** | Browser control with Playwright |
+| 🔎 **Web Search** | Search and retrieve online information |
+| 📁 **File Processing** | Work with files and documents |
+| 👨‍💻 **Developer Assistant** | Coding and development assistance |
+| 📺 **YouTube Tools** | YouTube-related tools |
+| 🔔 **Reminders** | Create and manage reminders |
+| 🧠 **Memory** | Store and manage assistant information |
+| 🔐 **AI Providers** | Gemini and OpenRouter support |
 
 ---
 
-# 📥 How to Get JARVIS
+# 📥 Getting Started
 
-## ⚠️ Important for New Users
+## ⚠️ New Users — Start Here
 
-**You must download the JARVIS ZIP file and extract it before you can run it.**
+**You must download the ZIP file from GitHub and extract it before running JARVIS.**
 
-JARVIS is currently provided as a Python project. It is **not yet a standalone `.exe` application**.
+JARVIS is currently distributed as a Python project and is **not yet a standalone `.exe` application**.
 
-### Step 1 — Open the GitHub Repository
+### 1️⃣ Open the Repository
 
 Go to:
 
-👉 https://github.com/brandon-wrld/jarvis-brandon
+**https://github.com/brandon-wrld/jarvis-brandon**
 
-### Step 2 — Download the ZIP
+### 2️⃣ Download the ZIP
 
-On the GitHub repository:
+On the GitHub repository page:
 
-1. Click the **Code** button.
-2. Click **Download ZIP**.
-3. Your browser will download the project.
+**Code → Download ZIP**
 
-The ZIP will normally be saved in your:
+Your browser will normally save the file to:
 
 ```text
-Downloads
-
-folder.
+Downloads/
+```
 
 The file will look similar to:
 
+```text
 jarvis-brandon-main.zip
-Step 3 — Extract the ZIP
+```
 
-Go to your Downloads folder.
+### 3️⃣ Extract the ZIP
+
+Open your Downloads folder.
 
 Right-click:
 
+```text
 jarvis-brandon-main.zip
+```
 
 Select:
 
+```text
 Extract All...
+```
 
-Choose somewhere convenient, such as:
+Extract it somewhere convenient, such as your Desktop.
 
-Desktop
+You should now have:
 
-After extraction, you should have:
-
+```text
 Desktop/
 └── jarvis-brandon-main/
     ├── actions/
@@ -86,519 +105,35 @@ Desktop/
     ├── requirements.txt
     ├── setup.py
     └── README.md
-🚨 IMPORTANT
+```
 
-Do not try to run JARVIS from inside the ZIP file.
+### 🚨 Important
+
+**Do not run JARVIS from inside the ZIP file.**
 
 Always:
 
+```text
 Download ZIP
-      ↓
+     ↓
 Extract ZIP
-      ↓
+     ↓
 Open extracted folder
-      ↓
+     ↓
 Install dependencies
-      ↓
+     ↓
 Configure API keys
-      ↓
+     ↓
 Run JARVIS
-🪟 Windows Installation
-
-Windows is currently the recommended platform for running the complete JARVIS experience.
-
-This is because JARVIS can interact with your local:
-
-🎤 Microphone
-🔊 Speakers
-🖥️ Screen
-🖱️ Mouse
-⌨️ Keyboard
-🪟 Windows applications
-Requirements
-
-Before installing JARVIS, install:
-
-Windows 10 or Windows 11
-Python 3.13
-Internet connection
-Working microphone
-Speakers or headphones
-🚀 Installation
-1. Open the JARVIS folder
-
-After extracting the ZIP, open the extracted folder.
-
-For example:
-
-C:\Users\YourName\Desktop\jarvis-brandon-main
-
-You should see:
-
-main.py
-requirements.txt
-setup.py
-actions/
-agent/
-config/
-core/
-memory/
-2. Open PowerShell
-
-Open the JARVIS folder using File Explorer.
-
-Click the address bar and type:
-
-powershell
-
-Press Enter.
-
-Check that you are inside the JARVIS folder:
-
-dir
-
-You should see:
-
-main.py
-requirements.txt
-3. Create a virtual environment
-
-Run:
-
-py -3.13 -m venv .venv
-
-This creates a separate Python environment for JARVIS.
-
-4. Activate the virtual environment
-
-Run:
-
-.\.venv\Scripts\Activate.ps1
-
-You should see:
-
-(.venv) PS C:\Users\YourName\Desktop\jarvis-brandon-main>
-If PowerShell blocks activation
-
-Run:
-
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-
-Then activate again:
-
-.\.venv\Scripts\Activate.ps1
-📦 Install Dependencies
-
-Upgrade pip:
-
-python -m pip install --upgrade pip setuptools wheel
-
-Install the JARVIS dependencies:
-
-pip install -r requirements.txt
-
-This may take several minutes.
-
-🌐 Install Browser Support
-
-JARVIS uses Playwright for browser automation.
-
-Install Chromium:
-
-python -m playwright install chromium
-🔑 Configure Your API Keys
-
-JARVIS uses AI services such as Gemini and OpenRouter.
-
-Inside the project folder you will find:
-
-.env.example
-
-Create a copy of this file and rename it:
-
-.env
-
-Your folder should contain:
-
-jarvis-brandon-main/
-├── .env
-├── .env.example
-├── main.py
-└── ...
-
-Open .env and enter your own API keys:
-
-GEMINI_API_KEY=your_gemini_api_key_here
-OPENROUTER_API_KEY=your_openrouter_api_key_here
-
-Replace the placeholder values with your actual API keys.
-
-🔐 IMPORTANT SECURITY WARNING
-
-Never upload your API keys to GitHub.
-
-Do not publish:
-
-.env
-config/api_keys.json
-
-Do not share API keys through:
-
-GitHub
-WhatsApp
-Discord
-Screenshots
-Social media
-Public repositories
-
-Each user should use their own API keys.
-
-If you accidentally expose an API key, revoke it immediately and generate a new one.
-
-▶️ Run JARVIS
-
-Make sure your virtual environment is active:
-
-.\.venv\Scripts\Activate.ps1
-
-Then run:
-
-python main.py
-
-JARVIS will start.
-
-🎤 Test Your Microphone
-
-Before using voice features, check whether Python can detect your audio devices:
-
-python -c "import sounddevice as sd; print(sd.query_devices())"
-
-Your microphone should appear in the list.
-
-If Windows does not detect your microphone, check:
-
-Settings
-→ System
-→ Sound
-→ Input
-
-Also make sure microphone permissions are enabled.
-
-🖱️ Test Computer Control
-
-JARVIS uses PyAutoGUI for computer interaction.
-
-Test it with:
-
-python -c "import pyautogui; print(pyautogui.size())"
-
-A successful result should display your screen resolution, for example:
-
-Size(width=1920, height=1080)
-☁️ GitHub Codespaces
-⚠️ Why Codespaces Cannot Run the Full JARVIS Experience
-
-GitHub Codespaces is excellent for developing JARVIS, but it is not recommended for running the complete desktop assistant.
-
-The reason is simple:
-
-Codespaces runs JARVIS on a remote Linux computer in the cloud, not directly on your physical computer.
-
-For example:
-
-             YOUR COMPUTER
-        ┌─────────────────────┐
-        │ 🖥️ Real screen      │
-        │ 🎤 Real microphone  │
-        │ 🔊 Real speakers    │
-        │ 🖱️ Real mouse       │
-        │ ⌨️ Real keyboard    │
-        └──────────┬──────────┘
-                   │
-                Internet
-                   │
-                   ▼
-          GITHUB CODESPACE
-        ┌─────────────────────┐
-        │ 🐧 Remote Linux     │
-        │                     │
-        │ 🤖 JARVIS          │
-        │ Virtual environment │
-        └─────────────────────┘
-
-When you run:
-
-python main.py
-
-inside Codespaces, JARVIS is running on the remote Linux machine.
-
-It therefore does not automatically have access to your physical:
-
-🎤 Microphone
-🔊 Speakers
-🖥️ Windows screen
-🖱️ Mouse
-⌨️ Keyboard
-📷 Webcam
-🪟 Windows applications
-❓ What about DISPLAY and XAUTHORITY?
-
-You may see solutions that configure:
-
-DISPLAY=:99
-XAUTHORITY=/tmp/.Xauthority
-
-These variables can create or configure a virtual display inside the Codespace.
-
-However, they do not connect that virtual display to your physical Windows computer.
-
-For example:
-
-DISPLAY=:99
-
-means:
-
-Use display :99 inside the remote Linux environment.
-
-It does not mean:
-
-Control the Windows screen sitting in front of the user.
-
-The same applies to audio.
-
-Installing a Linux audio library such as PortAudio can allow Python to communicate with audio devices available inside the remote environment, but it does not automatically connect JARVIS to the microphone and speakers physically connected to your Windows computer.
-
-✅ Therefore:
-
-Use GitHub Codespaces for development.
-
-Use your local Windows computer to run JARVIS with full voice and computer-control capabilities.
-
-🧪 Troubleshooting
-Python is not recognized
-
-Check your Python version:
-
-py --version
-
-Python 3.13 is recommended.
-
-ModuleNotFoundError
-
-Make sure the virtual environment is active:
-
-.\.venv\Scripts\Activate.ps1
-
-Then reinstall:
-
-pip install -r requirements.txt
-Playwright browser error
-
-Run:
-
-python -m playwright install chromium
-Microphone not detected
-
-Check:
-
-Windows Settings
-→ System
-→ Sound
-→ Input
-
-Then run:
-
-python -c "import sounddevice as sd; print(sd.query_devices())"
-JARVIS does not start
-
-Run:
-
-python main.py
-
-Read the complete error displayed in PowerShell.
-
-When requesting support, provide the full traceback so the problem can be diagnosed correctly.
-
-📂 Project Structure
-jarvis-brandon/
-│
-├── actions/
-│   ├── browser_control.py
-│   ├── code_helper.py
-│   ├── computer_control.py
-│   ├── computer_settings.py
-│   ├── desktop.py
-│   ├── dev_agent.py
-│   ├── file_controller.py
-│   ├── file_processor.py
-│   ├── flight_finder.py
-│   ├── game_updater.py
-│   ├── open_app.py
-│   ├── reminder.py
-│   ├── screen_processor.py
-│   ├── send_message.py
-│   ├── weather_report.py
-│   ├── web_search.py
-│   └── youtube_video.py
-│
-├── agent/
-│   ├── error_handler.py
-│   ├── executor.py
-│   ├── planner.py
-│   └── task_queue.py
-│
-├── config/
-│
-├── core/
-│
-├── memory/
-│
-├── .env.example
-├── .gitignore
-├── main.py
-├── requirements.txt
-├── setup.py
-└── README.md
-🏗️ How JARVIS Works
-                USER
-                  │
-                  ▼
-        ┌──────────────────┐
-        │   JARVIS INPUT   │
-        └────────┬─────────┘
-                 │
-                 ▼
-        ┌──────────────────┐
-        │   AI / PLANNER   │
-        └────────┬─────────┘
-                 │
-        ┌────────┼─────────┐
-        ▼        ▼         ▼
-   Computer   Browser   Developer
-   Control   Automation    Tools
-        │        │         │
-        └────────┼─────────┘
-                 ▼
-        ┌──────────────────┐
-        │     RESPONSE     │
-        └──────────────────┘
-🤝 Contributing
-
-Contributions are welcome.
-
-Fork the repository:
-
-https://github.com/brandon-wrld/jarvis-brandon
-
-Create a feature branch:
-
-git checkout -b feature/my-feature
-
-Make your changes, test them, and submit a pull request.
-
-🛣️ Roadmap
- Improved wake-word detection
- Better long-term memory
- More AI providers
- Improved browser automation
- More computer automation
- Linux desktop support
- macOS support
- Plugin architecture
- Voice-only mode
- Improved GUI
- First-run setup wizard
- One-click Windows installer
- Automatic updates
- Standalone .exe application
-👨‍💻 Author
-Brandon Maina
-
-GitHub:
-
-https://github.com/brandon-wrld
-
-Project:
-
-https://github.com/brandon-wrld/jarvis-brandon
-
-⭐ Support the Project
-
-If you find JARVIS useful:
-
-⭐ Star the repository
-🍴 Fork the project
-🐛 Report bugs
-💡 Suggest features
-🤝 Contribute improvements
-
-🤖 JARVIS
-
-Think. Understand. Automate. Execute.
-
-Built with Python + AI.
-
-make look presentable
-
-Absolutely. I’d make it look much more like a professional open-source project README instead of a long installation document. Here is a cleaner, more polished version you can paste directly into GitHub.
-
-# 🤖 JARVIS
-
-<p align="center">
-  <strong>Your Personal AI Assistant</strong>
-</p>
-
-<p align="center">
-  Think • Understand • Automate • Execute
-</p>
-
-<p align="center">
-
-![Python](https://img.shields.io/badge/Python-3.13-blue?style=for-the-badge&logo=python)
-![AI](https://img.shields.io/badge/AI-Powered-purple?style=for-the-badge)
-![Platform](https://img.shields.io/badge/Platform-Windows-success?style=for-the-badge&logo=windows)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-
-</p>
+```
 
 ---
 
-## 🧠 What is JARVIS?
+# 🪟 Windows Installation
 
-**JARVIS** is a Python-powered personal AI assistant designed to help you interact with your computer, automate tasks, search the web, work with files, control your browser, and communicate using voice.
+Windows is currently the **recommended platform** for the complete JARVIS experience.
 
-JARVIS combines **AI intelligence + voice interaction + computer automation + browser automation** into one assistant.
-
-> ⚡ Run it locally on your computer for the complete JARVIS experience.
-
----
-
-# ✨ Features
-
-| Feature | Description |
-|---|---|
-| 🧠 **AI Assistant** | Natural-language conversations and intelligent responses |
-| 🎙️ **Voice Control** | Voice input and text-to-speech |
-| 🖥️ **Desktop Control** | Interact with your computer |
-| 🖱️ **Mouse & Keyboard** | Automate mouse and keyboard actions |
-| 🌐 **Browser Automation** | Control browsers using Playwright |
-| 🔎 **Web Search** | Search and retrieve online information |
-| 📁 **File Processing** | Work with documents and files |
-| 👨‍💻 **Developer Assistant** | Coding and development assistance |
-| 📺 **YouTube Tools** | YouTube-related automation |
-| 🔔 **Reminders** | Create and manage reminders |
-| 🧠 **Memory** | Store and manage assistant information |
-| 🔐 **AI Providers** | Gemini and OpenRouter support |
-
----
-
-# 🖥️ Recommended Platform
-
-### 🪟 Windows
-
-Windows is currently the **recommended platform** for running the complete version of JARVIS.
-
-This allows JARVIS to interact with your actual:
+This allows JARVIS to interact with your local:
 
 ```text
 🎤 Microphone
@@ -608,89 +143,31 @@ This allows JARVIS to interact with your actual:
 ⌨️ Keyboard
 🪟 Windows Applications
 🌐 Browser
-📥 Getting Started
-⚠️ New Users — Read This First
+```
 
-You must download the ZIP from GitHub and extract it before running JARVIS.
+## Requirements
 
-JARVIS is currently distributed as a Python project and is not yet a standalone .exe application.
+- Windows 10 or Windows 11
+- Python 3.13
+- Internet connection
+- Working microphone
+- Speakers or headphones
 
-1️⃣ Open the Repository
+---
 
-Visit:
+## 1️⃣ Open the JARVIS Folder
 
-👉 https://github.com/brandon-wrld/jarvis-brandon
+After extracting the ZIP, open the extracted folder.
 
-2️⃣ Download JARVIS
+Example:
 
-On the GitHub page:
-
-Code
-  ↓
-Download ZIP
-
-The ZIP will normally be saved inside your:
-
-Downloads/
-
-folder.
-
-You should see something similar to:
-
-jarvis-brandon-main.zip
-3️⃣ Extract the ZIP
-
-Right-click the ZIP:
-
-jarvis-brandon-main.zip
-
-Select:
-
-Extract All...
-
-Extract it somewhere convenient, such as your:
-
-Desktop/
-
-You should now have:
-
-Desktop/
-└── jarvis-brandon-main/
-🚨 Important
-
-Do not run JARVIS directly from inside the ZIP.
-
-You must:
-
-Download
-   ↓
-Extract
-   ↓
-Open the extracted folder
-   ↓
-Install
-   ↓
-Configure
-   ↓
-Run
-⚙️ Installation
-Requirements
-
-Before installing, make sure you have:
-
-🪟 Windows 10 or Windows 11
-🐍 Python 3.13
-🌐 Internet connection
-🎤 Working microphone
-🔊 Speakers or headphones
-1️⃣ Open the JARVIS Folder
-
-For example:
-
+```text
 C:\Users\YourName\Desktop\jarvis-brandon-main
+```
 
 Make sure you can see:
 
+```text
 main.py
 requirements.txt
 setup.py
@@ -699,184 +176,260 @@ agent/
 config/
 core/
 memory/
-2️⃣ Open PowerShell
+```
+
+---
+
+## 2️⃣ Open PowerShell
 
 Open the JARVIS folder in File Explorer.
 
 Click the address bar and type:
 
+```text
 powershell
+```
 
-Press Enter.
+Press **Enter**.
 
-Check your location:
+Check that you are in the correct folder:
 
+```powershell
 dir
+```
 
 You should see:
 
+```text
 main.py
 requirements.txt
-3️⃣ Create a Virtual Environment
+```
+
+---
+
+## 3️⃣ Create a Virtual Environment
+
+```powershell
 py -3.13 -m venv .venv
-4️⃣ Activate the Environment
+```
+
+---
+
+## 4️⃣ Activate the Environment
+
+```powershell
 .\.venv\Scripts\Activate.ps1
+```
 
 You should see:
 
+```text
 (.venv) PS C:\Users\YourName\Desktop\jarvis-brandon-main>
-PowerShell Execution Policy Error?
+```
 
-If you see:
+### If PowerShell blocks activation
 
-running scripts is disabled
+Run:
 
-run:
-
+```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
 
 Then:
 
+```powershell
 .\.venv\Scripts\Activate.ps1
-📦 Install Dependencies
+```
+
+---
+
+# 📦 Install Dependencies
 
 Upgrade pip:
 
+```powershell
 python -m pip install --upgrade pip setuptools wheel
+```
 
 Install JARVIS dependencies:
 
+```powershell
 pip install -r requirements.txt
+```
 
-Then install the browser required by Playwright:
+Install the browser required by Playwright:
 
+```powershell
 python -m playwright install chromium
-🔑 API Configuration
+```
 
-JARVIS requires an AI API key.
+---
+
+# 🔑 API Configuration
+
+JARVIS requires AI API access.
 
 Inside the project you will find:
 
+```text
 .env.example
+```
 
 Create a copy named:
 
+```text
 .env
+```
 
-Your project should look like:
+Then add your own API keys:
 
-jarvis-brandon-main/
-│
-├── .env
-├── .env.example
-├── main.py
-└── ...
-
-Open .env and add your own keys:
-
+```env
 GEMINI_API_KEY=your_gemini_api_key_here
 OPENROUTER_API_KEY=your_openrouter_api_key_here
+```
 
-Replace the placeholders with your actual API keys.
+Replace the placeholders with your own keys.
 
-🔐 Security
-🚨 Never upload your API keys to GitHub.
+## 🔐 Security
+
+**Never upload your `.env` file or real API keys to GitHub.**
 
 Keep these files private:
 
+```text
 .env
 config/api_keys.json
+```
 
-Never post API keys on:
+Each user should use their **own API keys**.
 
-❌ GitHub
-❌ WhatsApp
-❌ Discord
-❌ Screenshots
-❌ Social media
-❌ Public repositories
+---
 
-Every user should use their own API keys.
+# ▶️ Launch JARVIS
 
-If you accidentally expose a key, revoke it immediately and generate a new one.
+Make sure the virtual environment is active:
 
-▶️ Launch JARVIS
-
-Make sure your virtual environment is active:
-
+```powershell
 .\.venv\Scripts\Activate.ps1
+```
 
 Then:
 
+```powershell
 python main.py
+```
 
-🚀 JARVIS should now start.
+🚀 **JARVIS should now start.**
 
-🎤 Test Your Microphone
+---
 
-Before using voice features, run:
+# 🎤 Test Your Microphone
 
+Run:
+
+```powershell
 python -c "import sounddevice as sd; print(sd.query_devices())"
+```
 
-Your microphone should appear in the device list.
+Your microphone should appear in the list.
 
-If it doesn't, check:
+If it does not, check:
 
-Windows Settings
-      ↓
-System
-      ↓
-Sound
-      ↓
-Input
+**Windows Settings → System → Sound → Input**
 
-Make sure the correct microphone is selected.
+Also make sure Windows microphone permissions are enabled.
 
-🖱️ Test Computer Control
+---
+
+# 🖱️ Test Computer Control
 
 JARVIS uses PyAutoGUI for computer interaction.
 
 Run:
 
+```powershell
 python -c "import pyautogui; print(pyautogui.size())"
+```
 
-A successful result will look similar to:
+A successful result should display your screen resolution, for example:
 
+```text
 Size(width=1920, height=1080)
-🌐 Browser Automation
+```
+
+---
+
+# 🌐 Browser Automation
 
 JARVIS uses Playwright for browser automation.
 
-If you receive a Chromium/browser error, run:
+If Chromium is missing, run:
 
+```powershell
 python -m playwright install chromium
+```
 
-Then start JARVIS again:
+Then:
 
+```powershell
 python main.py
-☁️ GitHub Codespaces
-⚠️ Why Codespaces Isn't Recommended for Full JARVIS
+```
 
-GitHub Codespaces is excellent for developing JARVIS, but it is not designed to give a cloud machine direct control over your physical computer.
+---
 
-Why?
+# ☁️ GitHub Codespaces
 
-Codespaces runs your project on a:
+## ⚠️ Why Codespaces Cannot Run the Full JARVIS Experience
 
-Remote Linux computer in the cloud.
+GitHub Codespaces is excellent for **developing JARVIS**, but it is not recommended for running the complete desktop assistant.
 
-Your physical computer is somewhere else.
+### Why?
+
+Codespaces runs your project on a **remote Linux computer in the cloud**, not directly on your physical computer.
+
+When you run:
+
+```bash
+python main.py
+```
+
+inside Codespaces, JARVIS is running on GitHub's remote machine.
+
+That remote machine does not automatically have access to your physical computer's hardware.
+
+Therefore, it cannot normally control your:
+
+- 🎤 Physical microphone
+- 🔊 Physical speakers
+- 🖥️ Windows screen
+- 🖱️ Physical mouse
+- ⌨️ Physical keyboard
+- 📷 Webcam
+- 🪟 Windows applications
+
+### What about `DISPLAY` and `XAUTHORITY`?
+
+You may see solutions using:
+
+```env
+DISPLAY=:99
+XAUTHORITY=/tmp/.Xauthority
+```
+
+These can configure a **virtual display inside the Codespace**.
+
+They do **not** connect that virtual display to your physical Windows screen.
 
 For example:
 
-        YOUR COMPUTER
+```text
+        YOUR WINDOWS PC
 ┌──────────────────────────┐
 │ 🖥️ Real Screen           │
-│ 🎤 Microphone            │
-│ 🔊 Speakers              │
-│ 🖱️ Mouse                 │
-│ ⌨️ Keyboard              │
-│ 🪟 Windows Apps          │
+│ 🎤 Real Microphone       │
+│ 🔊 Real Speakers         │
+│ 🖱️ Real Mouse            │
+│ ⌨️ Real Keyboard         │
 └────────────┬─────────────┘
              │
           Internet
@@ -887,60 +440,25 @@ For example:
 │ 🐧 Remote Linux Machine  │
 │                          │
 │ 🤖 JARVIS                │
-│ Virtual Environment      │
+│ Virtual Display          │
 └──────────────────────────┘
+```
 
-When you run:
+A virtual display exists **inside the remote Linux machine**. It is not your actual Windows desktop.
 
-python main.py
+The same applies to audio. Installing PortAudio or other Linux audio packages can make audio devices available inside the remote environment, but it does not automatically connect JARVIS to the microphone and speakers physically connected to your Windows computer.
 
-inside Codespaces, JARVIS runs on the remote Linux machine.
+### ✅ Recommended setup
 
-It does not automatically get access to your physical:
+**Use Codespaces for development.**
 
-🎤 Microphone
-🔊 Speakers
-🖥️ Windows Screen
-🖱️ Mouse
-⌨️ Keyboard
-📷 Webcam
-🪟 Windows Applications
-❓ What About DISPLAY and XAUTHORITY?
+**Download the ZIP, extract it, install it, and run JARVIS locally on Windows for the full experience.**
 
-You may see solutions using:
+---
 
-DISPLAY=:99
-XAUTHORITY=/tmp/.Xauthority
+# 🏗️ Architecture
 
-These settings can create or configure a virtual display inside the Codespace.
-
-They do not connect that virtual display to your physical Windows screen.
-
-For example:
-
-DISPLAY=:99
-
-means:
-
-Use display :99 inside the remote Linux environment.
-
-It does not mean:
-
-Control the Windows screen in front of the user.
-
-The same applies to audio.
-
-Installing PortAudio or other Linux audio packages can make audio devices available inside the remote environment, but it does not automatically connect JARVIS to the microphone and speakers physically connected to your Windows computer.
-
-✅ The solution
-
-For the complete JARVIS experience:
-
-Download → Extract → Install → Run locally on Windows.
-
-Use Codespaces primarily for development.
-
-🏗️ Architecture
+```text
                     👤 USER
                       │
                       ▼
@@ -966,7 +484,13 @@ Use Codespaces primarily for development.
               ┌───────────────┐
               │    RESPONSE   │
               └───────────────┘
-📂 Project Structure
+```
+
+---
+
+# 📂 Project Structure
+
+```text
 jarvis-brandon/
 │
 ├── actions/
@@ -1004,138 +528,175 @@ jarvis-brandon/
 ├── requirements.txt
 ├── setup.py
 └── README.md
-🛠️ Troubleshooting
-❌ Python not recognized
+```
+
+---
+
+# 🛠️ Troubleshooting
+
+### ❌ Python is not recognized
 
 Check:
 
+```powershell
 py --version
+```
 
 Python 3.13 is recommended.
 
-❌ ModuleNotFoundError
+### ❌ `ModuleNotFoundError`
 
-Activate your virtual environment:
+Activate the virtual environment:
 
+```powershell
 .\.venv\Scripts\Activate.ps1
-
-Then reinstall:
-
-pip install -r requirements.txt
-❌ Playwright error
-
-Run:
-
-python -m playwright install chromium
-❌ Microphone not detected
-
-Check:
-
-Windows Settings
-→ System
-→ Sound
-→ Input
+```
 
 Then:
 
-python -c "import sounddevice as sd; print(sd.query_devices())"
-❌ JARVIS won't start
+```powershell
+pip install -r requirements.txt
+```
+
+### ❌ Playwright error
 
 Run:
 
+```powershell
+python -m playwright install chromium
+```
+
+### ❌ Microphone not detected
+
+Check:
+
+**Windows Settings → System → Sound → Input**
+
+Then:
+
+```powershell
+python -c "import sounddevice as sd; print(sd.query_devices())"
+```
+
+### ❌ JARVIS does not start
+
+Run:
+
+```powershell
 python main.py
+```
 
-Read the error shown in PowerShell.
+Read the complete error displayed in PowerShell.
 
-When asking for support, provide the complete error/traceback.
+When requesting support, provide the **complete traceback** and never include your API keys.
 
-🛣️ Roadmap
-Current
- AI conversations
- Computer automation
- Browser automation
- Web search
- Voice capabilities
- File processing
- Developer tools
- Memory system
- Gemini support
- OpenRouter support
-Future
- Advanced wake-word detection
- Improved long-term memory
- More AI providers
- Advanced browser automation
- Plugin architecture
- Improved GUI
- Linux desktop support
- macOS support
- First-run setup wizard
- Automatic updates
- One-click Windows installer
- Standalone .exe application
-🤝 Contributing
+---
+
+# 🛣️ Roadmap
+
+### Current
+
+- [x] AI conversations
+- [x] Computer automation
+- [x] Browser automation
+- [x] Web search
+- [x] Voice capabilities
+- [x] File processing
+- [x] Developer tools
+- [x] Memory system
+- [x] Gemini support
+- [x] OpenRouter support
+
+### Future
+
+- [ ] Advanced wake-word detection
+- [ ] Improved long-term memory
+- [ ] More AI providers
+- [ ] Advanced browser automation
+- [ ] Plugin architecture
+- [ ] Improved GUI
+- [ ] Linux desktop support
+- [ ] macOS support
+- [ ] First-run setup wizard
+- [ ] Automatic updates
+- [ ] One-click Windows installer
+- [ ] Standalone `.exe` application
+
+---
+
+# 🤝 Contributing
 
 Contributions are welcome!
 
-Fork the repository
+Clone the repository:
+
+```bash
 git clone https://github.com/brandon-wrld/jarvis-brandon.git
+```
 
-Create a branch:
+Create a feature branch:
 
+```bash
 git checkout -b feature/my-feature
+```
 
 Make your changes, test them, and submit a pull request.
 
-🐛 Issues & Support
+---
+
+# 🐛 Issues & Support
 
 Found a bug?
 
-Open an issue on GitHub:
+Open an issue:
 
-👉 https://github.com/brandon-wrld/jarvis-brandon/issues
+**https://github.com/brandon-wrld/jarvis-brandon/issues**
 
 When reporting an issue, include:
 
-Operating system
-Python version
-JARVIS version/commit
-Complete error message
-Steps to reproduce the problem
+- Operating system
+- Python version
+- Error message
+- Steps to reproduce the problem
 
-Never include your API keys.
+**Never include API keys.**
 
-⭐ Support JARVIS
+---
 
-If you like the project, consider supporting it:
+# ⭐ Support the Project
 
-⭐ Star the repository
+If you find JARVIS useful:
 
-🍴 Fork the project
+⭐ **Star the repository**  
+🍴 **Fork the project**  
+🐛 **Report bugs**  
+💡 **Suggest features**  
+🤝 **Contribute**
 
-🐛 Report bugs
+---
 
-💡 Suggest features
+# 👨‍💻 Author
 
-🤝 Contribute
-
-👨‍💻 Author
-Brandon Maina
+## Brandon Maina
 
 GitHub:
 
-👉 https://github.com/brandon-wrld
+**https://github.com/brandon-wrld**
 
 Project:
 
-👉 https://github.com/brandon-wrld/jarvis-brandon
+**https://github.com/brandon-wrld/jarvis-brandon**
+
+---
 
 <p align="center">
-🤖 JARVIS
-Think. Understand. Automate. Execute.
 
-Built with Python + AI
+# 🤖 JARVIS
+
+### Think. Understand. Automate. Execute.
+
+**Built with Python + AI**
 
 ⭐ Star the project if you find it useful!
 
-</p> ```
+</p>
