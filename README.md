@@ -204,6 +204,10 @@ dir
 ```
 
 <p align="center">
+  <img src="./assets/venv-setup.png" width="700" alt="Installing Python 3.13 and creating the virtual environment">
+
+</p>
+<p align="center">
   <img src="./assets/cd-maina.png" width="700" alt="Navigating into the maina folder in PowerShell">
 </p>
 
@@ -214,21 +218,14 @@ main.py
 requirements.txt
 ```
 
-<p align="center">
-  <img src="./assets/dir-listing.png" width="700" alt="Directory listing showing project files">
-</p>
-
----
-
 ## 3️⃣ Create a Virtual Environment
 
 ```powershell
 py install 3.13
 py -3.13 -m venv .venv
 ```
-
 <p align="center">
-  <img src="./assets/venv-setup.png" width="700" alt="Installing Python 3.13 and creating the virtual environment">
+  <img src="./assets/dir-listing.png" width="700" alt="Directory listing showing project files">
 </p>
 
 ---
