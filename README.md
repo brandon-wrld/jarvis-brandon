@@ -340,11 +340,9 @@ python main.py
 
 <p align="center">
 
-https://github.com/brandon-wrld/jarvis-brandon/assets/video1-compressed.mp4
+https://github.com/brandon-wrld/jarvis-brandon/blob/main/assets/video1-compressed.mp4
 
 </p>
-
-> To embed the video so it plays inline on GitHub: drag-and-drop `video1.mp4` into a new GitHub Issue or PR comment box, wait for it to upload, then copy the generated `https://github.com/.../assets/.../video1.mp4` URL it gives you and paste it in place of the placeholder link above (on its own line, no markdown wrapper needed).
 
 ---
 
