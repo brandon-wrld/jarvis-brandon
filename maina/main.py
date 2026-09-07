@@ -289,24 +289,6 @@ TOOL_DECLARATIONS = [
         }
     },
     {
-        "name": "open_agent",
-        "description": (
-            "Opens a JARVIS specialist agent window. Use this whenever the user asks to open, launch, "
-            "start, or show Microline, Microline Scientific, Assignment Helper, or Assignment. "
-            "This is for JARVIS agent windows, not regular desktop applications."
-        ),
-        "parameters": {
-            "type": "OBJECT",
-            "properties": {
-                "agent": {
-                    "type": "STRING",
-                    "description": "Agent name: microline or assignment"
-                }
-            },
-            "required": ["agent"]
-        }
-    },
-    {
         "name": "agent_task",
         "description": (
             "Executes complex multi-step tasks requiring multiple different tools. "
@@ -512,18 +494,6 @@ class JarvisLive:
         self._turn_done_event: asyncio.Event | None = None
 
     def _on_text_command(self, text: str):
-        normalized = text.strip().lower()
-        agent_aliases = {
-            "microline": "microline",
-            "microline scientific": "microline",
-            "assignment": "assignment",
-            "assignment helper": "assignment",
-        }
-        for phrase, agent_id in agent_aliases.items():
-            if re.search(rf"\b(?:open|launch|start|show)\s+{re.escape(phrase)}\b", normalized):
-                self.ui.open_agent(agent_id)
-                self.ui.write_log(f"SYS: Opening {phrase.title()} agent.")
-                return
         if not self._loop or not self.session:
             return
         asyncio.run_coroutine_threadsafe(
@@ -619,22 +589,7 @@ class JarvisLive:
         result = "Done."
 
         try:
-            if name == "open_agent":
-                agent = str(args.get("agent", "")).strip().lower()
-                aliases = {
-                    "microline": "microline",
-                    "microline scientific": "microline",
-                    "assignment": "assignment",
-                    "assignment helper": "assignment",
-                }
-                agent_id = aliases.get(agent)
-                if not agent_id:
-                    result = "Unknown agent. Available agents: microline or assignment."
-                else:
-                    self.ui.open_agent(agent_id)
-                    result = f"Opening {agent_id} agent."
-
-            elif name == "open_app":
+            if name == "open_app":
                 r = await loop.run_in_executor(None, lambda: open_app(parameters=args, response=None, player=self.ui))
                 result = r or f"Opened {args.get('app_name')}."
 
