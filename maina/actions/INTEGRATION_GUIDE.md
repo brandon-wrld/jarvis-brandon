@@ -1,4 +1,4 @@
-# Adding the new skills to Mark-XXXIX-Ultra
+# Adding the new skills to Brandon's JARVIS
 
 8 new action files, each following the exact pattern used by your existing
 `actions/*.py` files:
