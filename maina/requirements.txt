@@ -1,5 +1,4 @@
 ﻿
-Requirements · TXT
 sounddevice
 google-genai
 google-generativeai
@@ -25,10 +24,10 @@ python-docx
 pandas
 plyer
 pydub
- 
+
 # Windows-only (voice control, toast notifications, Windows UI automation)
 comtypes; platform_system == "Windows"
 pycaw; platform_system == "Windows"
 win10toast; platform_system == "Windows"
 pywinauto; platform_system == "Windows"
- 
+
