@@ -203,12 +203,20 @@ cd maina
 dir
 ```
 
+<p align="center">
+  <img src="./assets/cd-maina.png" width="700" alt="Navigating into the maina folder in PowerShell">
+</p>
+
 You should see:
 
 ```text
 main.py
 requirements.txt
 ```
+
+<p align="center">
+  <img src="./assets/dir-listing.png" width="700" alt="Directory listing showing project files">
+</p>
 
 ---
 
@@ -218,6 +226,10 @@ requirements.txt
 py install 3.13
 py -3.13 -m venv .venv
 ```
+
+<p align="center">
+  <img src="./assets/venv-setup.png" width="700" alt="Installing Python 3.13 and creating the virtual environment">
+</p>
 
 ---
 
@@ -326,6 +338,16 @@ python main.py
 ```
 
 🚀 **JARVIS should now start.**
+
+### 🎬 Demo
+
+<p align="center">
+
+https://github.com/user-attachments/assets/REPLACE-WITH-YOUR-VIDEO-ID
+
+</p>
+
+> To embed the video so it plays inline on GitHub: drag-and-drop `video1.mp4` into a new GitHub Issue or PR comment box, wait for it to upload, then copy the generated `https://github.com/.../assets/.../video1.mp4` URL it gives you and paste it in place of the placeholder link above (on its own line, no markdown wrapper needed).
 
 ---
 
