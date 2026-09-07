@@ -1,1 +1,8 @@
 maina/config/api_keys.json
+maina/memory/long_term.json
+__pycache__/
+*.py[cod]
+*.zip
+.vscode/
+.venv/
+venv/

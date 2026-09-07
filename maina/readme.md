@@ -1,5 +1,5 @@
-# 🤖 MARK XXXIX (39)
-
+# JARVIS
+### A cross-platform personal AI assistant
 
 A real-time voice AI that can hear, see, understand, and control your computer — on any OS. Supporting Windows, macOS, and Linux. Local execution. Zero subscriptions. Engineered for total autonomy.
 
@@ -39,6 +39,7 @@ It's not just an assistant — it's an extension of your digital life.
 ## ⚡ Quick Start
 
 ```bash
+git clone <repository-url>
 cd Mark-XXXIX
 pip install -r requirements.txt
 playwright install

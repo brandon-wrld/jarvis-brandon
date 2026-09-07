@@ -1,4 +1,4 @@
-# 🤖 JARVIS
+# JARVIS
 
 <p align="center">
   <strong>Your Personal AI Assistant</strong><br>
@@ -13,7 +13,7 @@
 
 ---
 
-## 🧠 What is JARVIS?
+## What is JARVIS?
 
 **JARVIS** is a Python-powered personal AI assistant designed to combine **AI conversation, voice interaction, computer automation, browser control, web search, file processing, and developer assistance** into one intelligent assistant.
 
@@ -691,7 +691,7 @@ Project:
 
 <p align="center">
 
-# 🤖 JARVIS
+# JARVIS
 
 ### Think. Understand. Automate. Execute.
 
