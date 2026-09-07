@@ -187,7 +187,11 @@ Open the JARVIS folder in File Explorer.
 Click the address bar and type:
 
 ```text
-powershell
+powershell 
+Run in Virtual Studio (recommended)
+# 2. Clone Brandon's JARVIS repository
+git clone https://github.com/brandon-wrld/jarvis-brandon.git
+
 ```
 
 Press **Enter**.
@@ -195,8 +199,17 @@ Press **Enter**.
 Check that you are in the correct folder:
 
 ```powershell
+cd maina
 dir
 ```
+
+<p align="center">
+  <img src="./assets/venv-setup.png" width="700" alt="Installing Python 3.13 and creating the virtual environment">
+
+</p>
+<p align="center">
+  <img src="./assets/cd-maina.png" width="700" alt="Navigating into the maina folder in PowerShell">
+</p>
 
 You should see:
 
@@ -205,13 +218,15 @@ main.py
 requirements.txt
 ```
 
----
-
 ## 3️⃣ Create a Virtual Environment
 
 ```powershell
+py install 3.13
 py -3.13 -m venv .venv
 ```
+<p align="center">
+  <img src="./assets/dir-listing.png" width="700" alt="Directory listing showing project files">
+</p>
 
 ---
 
@@ -320,6 +335,14 @@ python main.py
 ```
 
 🚀 **JARVIS should now start.**
+
+### 🎬 Demo
+
+<p align="center">
+
+https://github.com/brandon-wrld/jarvis-brandon/blob/main/assets/video1-compressed.mp4
+
+</p>
 
 ---
 
