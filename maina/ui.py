@@ -10,7 +10,6 @@ import sys
 import threading
 import time
 from pathlib import Path
-from urllib.parse import urljoin, urlparse
 
 import psutil
 
@@ -41,10 +40,7 @@ CORE_PROMPT_FILE = BASE_DIR / "core" / "prompt.txt"
 
 
 def _load_core_identity() -> str:
-    """Loads the same core/prompt.txt used by the main JARVIS voice loop,
-    so specialist agent windows (Microline, Assignment Helper, etc.)
-    share one consistent personality/tone instead of drifting into their
-    own separate voices."""
+    """Loads the same core/prompt.txt used by the main JARVIS voice loop."""
     try:
         return CORE_PROMPT_FILE.read_text(encoding="utf-8").strip()
     except Exception:
@@ -59,131 +55,6 @@ _LEFT_W  = 160
 _RIGHT_W = 360
 
 _OS = platform.system()
-
-# Gemini model used for the agent windows (Microline / Assignment Helper)
-_GEMINI_MODEL = "gemini-2.5-flash"
-
-_MICROLINE_SOURCE_ROOTS = (
-    "https://microlinescientific.com/",
-    "https://microline-scientific-portal.netlify.app/",
-)
-_MICROLINE_SUPABASE_URL = "https://kspxztsupbbjevtgapus.supabase.co"
-_MICROLINE_SUPABASE_ANON_KEY = (
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
-    "eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzcHh6dHN1cGJiamV2dGdhcHVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyODE0OTMsImV4cCI6MjA4Mjg1NzQ5M30."
-    "EUl7WwJS_g686It26qMgYEdCij5fHrYIx4CQRVSuFos"
-)
-_microline_source_cache: tuple[float, str] | None = None
-_microline_source_lock = threading.Lock()
-
-
-def _microline_source_context(max_pages: int = 8) -> str:
-    """Collect current public Microline pages for source-grounded answers."""
-    global _microline_source_cache
-    now = time.time()
-    with _microline_source_lock:
-        if _microline_source_cache and now - _microline_source_cache[0] < 900:
-            return _microline_source_cache[1]
-
-    try:
-        import requests
-        from bs4 import BeautifulSoup
-
-        session = requests.Session()
-        session.headers.update({"User-Agent": "JARVIS Microline Knowledge Agent/1.0"})
-        pending = list(_MICROLINE_SOURCE_ROOTS)
-        visited: set[str] = set()
-        documents: list[str] = []
-        allowed_hosts = {"microlinescientific.com", "microline-scientific-portal.netlify.app"}
-
-        while pending and len(documents) < max_pages:
-            url = pending.pop(0)
-            if url in visited:
-                continue
-            visited.add(url)
-            try:
-                response = session.get(url, timeout=12)
-                if response.status_code != 200 or "text/html" not in response.headers.get("content-type", ""):
-                    continue
-                soup = BeautifulSoup(response.text, "html.parser")
-                for element in soup(["script", "style", "noscript", "svg"]):
-                    element.decompose()
-                text = " ".join(soup.get_text(" ").split())
-                if text:
-                    documents.append(f"SOURCE: {url}\n{text[:3500]}")
-                for link in soup.find_all("a", href=True):
-                    href = str(link["href"])
-                    absolute = urljoin(url, href).split("#", 1)[0]
-                    parsed = urlparse(absolute)
-                    if parsed.scheme not in ("http", "https") or parsed.netloc not in allowed_hosts:
-                        continue
-                    if any(part in parsed.path.lower() for part in ("/auth", "/admin", "/login")):
-                        continue
-                    if absolute not in visited and absolute not in pending:
-                        pending.append(absolute)
-            except requests.RequestException:
-                continue
-
-        context = "\n\n".join(documents)
-        context = _microline_portal_context(session, context)
-    except ImportError:
-        context = ""
-
-    with _microline_source_lock:
-        _microline_source_cache = (now, context)
-    return context
-
-
-def _microline_portal_context(session, context: str) -> str:
-    """Add portal catalog and optional admin data to the source context."""
-    import requests
-
-    headers = {
-        "apikey": _MICROLINE_SUPABASE_ANON_KEY,
-        "Accept": "application/json",
-    }
-    access_token = ""
-    email = os.environ.get("MICROLINE_PORTAL_EMAIL", "").strip()
-    password = os.environ.get("MICROLINE_PORTAL_PASSWORD", "")
-    if email and password:
-        try:
-            login = session.post(
-                f"{_MICROLINE_SUPABASE_URL}/auth/v1/token?grant_type=password",
-                headers={**headers, "Content-Type": "application/json"},
-                json={"email": email, "password": password},
-                timeout=12,
-            )
-            if login.ok:
-                access_token = login.json().get("access_token", "")
-        except requests.RequestException:
-            pass
-
-    if access_token:
-        headers["Authorization"] = f"Bearer {access_token}"
-
-    tables = ["products"]
-    if access_token:
-        tables.extend(["inventory", "deliveries", "invoices", "sales", "clients"])
-
-    documents = []
-    for table in tables:
-        try:
-            response = session.get(
-                f"{_MICROLINE_SUPABASE_URL}/rest/v1/{table}",
-                headers=headers,
-                params={"select": "*", "limit": "100"},
-                timeout=12,
-            )
-            if response.ok:
-                rows = response.json()
-                if rows:
-                    documents.append(f"PORTAL TABLE: {table}\n{json.dumps(rows, ensure_ascii=True)[:7000]}")
-        except (requests.RequestException, ValueError):
-            continue
-
-    if documents:
-        context = f"{context}\n\n" + "\n\n".join(documents)
-    return context
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -211,9 +82,6 @@ class C:
     WHITE     = "#d8f8ff"
     DARK      = "#000d14"
     BAR_BG    = "#011520"
-    # Agent colours
-    MICRO_PRI = "#00ff88"
-    ASSIGN_PRI = "#cc88ff"
 
 
 def qcol(h: str, a: int = 255) -> QColor:
@@ -334,11 +202,6 @@ class HudCanvas(QWidget):
                 random.uniform(8, 22),
                 random.randint(15, 55)
             ))
-
-        # Agent link state — reflects whether the Microline / Assignment
-        # windows are actually open, instead of a hard-coded "LINKED".
-        self.microline_linked = False
-        self.assign_linked    = False
 
         self._tmr = QTimer(self)
         self._tmr.timeout.connect(self._step)
@@ -587,18 +450,6 @@ class HudCanvas(QWidget):
                 hgt = int(3 + 2*math.sin(self._tick*0.09 + i*0.6))
                 cl  = qcol(C.BORDER_B)
             p.fillRect(QRectF(wx0+i*bw, wy+22-hgt, bw-1, hgt), cl)
-
-        # Agent connection indicators (bottom corners) — now reflect the
-        # real state of the Microline / Assignment windows.
-        p.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
-        micro_txt = "⬡ MICROLINE: LINKED" if self.microline_linked else "⬡ MICROLINE: IDLE"
-        micro_col = C.MICRO_PRI if self.microline_linked else C.TEXT_DIM
-        p.setPen(QPen(qcol(micro_col, 180 if self.microline_linked else 120), 1))
-        p.drawText(QRectF(5, H-20, 130, 16), Qt.AlignmentFlag.AlignLeft, micro_txt)
-        assign_txt = "✎ ASSIGN: LINKED" if self.assign_linked else "✎ ASSIGN: IDLE"
-        assign_col = C.ASSIGN_PRI if self.assign_linked else C.TEXT_DIM
-        p.setPen(QPen(qcol(assign_col, 180 if self.assign_linked else 120), 1))
-        p.drawText(QRectF(W-155, H-20, 150, 16), Qt.AlignmentFlag.AlignRight, assign_txt)
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -923,60 +774,6 @@ class _DropCanvas(QWidget):
 
 
 # ═══════════════════════════════════════════════════════════════════
-# AGENT STATUS WIDGET — shows linked agents in left panel
-# ═══════════════════════════════════════════════════════════════════
-class AgentStatusWidget(QWidget):
-    launch_signal = pyqtSignal(str)  # agent_id
-
-    def __init__(self, agent_id: str, name: str, color: str, icon: str, parent=None):
-        super().__init__(parent)
-        self._id = agent_id
-        self._color = color
-        self._active = False
-        self.setFixedHeight(54)
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.setSpacing(1)
-
-        top = QHBoxLayout(); top.setSpacing(4)
-        ico_lbl = QLabel(icon)
-        ico_lbl.setFont(QFont("Courier New", 11))
-        ico_lbl.setFixedWidth(22)
-        ico_lbl.setStyleSheet(f"color: {color}; background: transparent;")
-        top.addWidget(ico_lbl)
-        name_lbl = QLabel(name)
-        name_lbl.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
-        name_lbl.setStyleSheet(f"color: {color}; background: transparent;")
-        top.addWidget(name_lbl, stretch=1)
-        lay.addLayout(top)
-
-        self._status_lbl = QLabel("● ONLINE")
-        self._status_lbl.setFont(QFont("Courier New", 7))
-        self._status_lbl.setStyleSheet(f"color: {C.GREEN}; background: transparent;")
-        lay.addWidget(self._status_lbl)
-
-        launch_btn = QPushButton("↗ Open Window")
-        launch_btn.setFixedHeight(18)
-        launch_btn.setFont(QFont("Courier New", 7))
-        launch_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        launch_btn.setStyleSheet(f"""
-            QPushButton {{
-                background: {C.PRI_GHO}; color: {color};
-                border: 1px solid {color}33; border-radius: 2px; padding: 1px 4px;
-            }}
-            QPushButton:hover {{ background: {color}22; border: 1px solid {color}; }}
-        """)
-        launch_btn.clicked.connect(lambda: self.launch_signal.emit(self._id))
-        lay.addWidget(launch_btn)
-
-    def set_active(self, v: bool):
-        self._active = v
-        self._status_lbl.setText("● PROCESSING" if v else "● ONLINE")
-        col = C.ACC2 if v else C.GREEN
-        self._status_lbl.setStyleSheet(f"color: {col}; background: transparent;")
-
-
-# ═══════════════════════════════════════════════════════════════════
 # SETUP OVERLAY
 # ═══════════════════════════════════════════════════════════════════
 class SetupOverlay(QWidget):
@@ -1099,11 +896,10 @@ class SetupOverlay(QWidget):
 class MainWindow(QMainWindow):
     _log_sig   = pyqtSignal(str)
     _state_sig = pyqtSignal(str)
-    _agent_launch_sig = pyqtSignal(str)
 
     def __init__(self, face_path: str):
         super().__init__()
-        self.setWindowTitle("J.A.R.V.I.S — MARK XXXIX ULTRA")
+        self.setWindowTitle("J.A.R.V.I.S — BRANDON'S JARVIS")
         self.setMinimumSize(_MIN_W, _MIN_H)
         self.resize(_DEFAULT_W, _DEFAULT_H)
 
@@ -1116,12 +912,7 @@ class MainWindow(QMainWindow):
 
         self.on_text_command = None
         self._muted          = False
-        self._agent_mode     = False
-        self._muted_before_agents = False
         self._current_file: str | None = None
-        self._agent_windows: dict = {}
-        self._agent_histories: dict[str, list[dict[str, object]]] = {}
-        self._agent_history_lock = threading.Lock()
 
         central = QWidget()
         central.setStyleSheet(f"background: {C.BG};")
@@ -1160,7 +951,6 @@ class MainWindow(QMainWindow):
 
         self._log_sig.connect(self._log.append_log)
         self._state_sig.connect(self._apply_state)
-        self._agent_launch_sig.connect(self._launch_agent)
 
         self._overlay: SetupOverlay | None = None
         self._ready = self._check_config()
@@ -1169,8 +959,6 @@ class MainWindow(QMainWindow):
 
         QShortcut(QKeySequence("F4"), self).activated.connect(self._toggle_mute)
         QShortcut(QKeySequence("F11"), self).activated.connect(self._toggle_fullscreen)
-        QShortcut(QKeySequence("F1"), self).activated.connect(lambda: self._launch_agent("microline"))
-        QShortcut(QKeySequence("F2"), self).activated.connect(lambda: self._launch_agent("assignment"))
 
     def _toggle_fullscreen(self):
         if self.isFullScreen(): self.showNormal()
@@ -1195,8 +983,8 @@ class MainWindow(QMainWindow):
             return l
 
         left_col = QVBoxLayout(); left_col.setSpacing(1)
-        left_col.addWidget(_badge("MARK XXXIX · ULTRA", C.PRI_DIM))
-        left_col.addWidget(_badge("[F1] Microline  [F2] Assign", C.TEXT_DIM))
+        left_col.addWidget(_badge("BRANDON'S JARVIS", C.PRI_DIM))
+        left_col.addWidget(_badge("[F4] Mute  [F11] Fullscreen", C.TEXT_DIM))
         lay.addLayout(left_col)
         lay.addStretch()
 
@@ -1206,7 +994,7 @@ class MainWindow(QMainWindow):
         title.setFont(QFont("Courier New", 20, QFont.Weight.Bold))
         title.setStyleSheet(f"color: {C.PRI}; background: transparent;")
         mid.addWidget(title)
-        sub = QLabel("Just A Rather Very Intelligent System  ·  ULTRA EDITION")
+        sub = QLabel("Just A Rather Very Intelligent System")
         sub.setAlignment(Qt.AlignmentFlag.AlignCenter)
         sub.setFont(QFont("Courier New", 7))
         sub.setStyleSheet(f"color: {C.PRI_DIM}; background: transparent;")
@@ -1271,34 +1059,12 @@ class MainWindow(QMainWindow):
         ip_lay.addWidget(os_lbl)
         lay.addWidget(info_panel)
 
-        lay.addSpacing(6)
-        # Agent status widgets
-        agent_hdr = QLabel("◈ LINKED AGENTS")
-        agent_hdr.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
-        agent_hdr.setStyleSheet(f"color: {C.PRI}; background: transparent; "
-                                f"border-bottom: 1px solid {C.BORDER}; padding-bottom: 4px;")
-        lay.addWidget(agent_hdr)
-
-        self._microline_status = AgentStatusWidget(
-            "microline", "Microline Sci.", C.MICRO_PRI, "⬡")
-        self._microline_status.launch_signal.connect(self._launch_agent)
-        self._microline_status.setStyleSheet(
-            f"background: {C.PANEL2}; border: 1px solid {C.BORDER}; border-radius: 3px; padding: 3px;")
-        lay.addWidget(self._microline_status)
-
-        self._assign_status = AgentStatusWidget(
-            "assignment", "Assignment Hlp", C.ASSIGN_PRI, "✎")
-        self._assign_status.launch_signal.connect(self._launch_agent)
-        self._assign_status.setStyleSheet(
-            f"background: {C.PANEL2}; border: 1px solid {C.BORDER}; border-radius: 3px; padding: 3px;")
-        lay.addWidget(self._assign_status)
-
         lay.addStretch()
 
         for txt, col in [
             ("AI CORE\nACTIVE",   C.GREEN),
             ("SEC\nCLEARED",      C.PRI),
-            ("PROTOCOL\nULTRA",   C.TEXT_DIM),
+            ("PROTOCOL\nBRANDON", C.TEXT_DIM),
         ]:
             lbl = QLabel(txt)
             lbl.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
@@ -1382,38 +1148,6 @@ class MainWindow(QMainWindow):
         self._style_mute_btn()
         lay.addWidget(self._mute_btn)
 
-        # Agent launch buttons
-        lay.addWidget(_sec("AGENT WINDOWS"))
-        agents_row = QHBoxLayout(); agents_row.setSpacing(4)
-        ml_btn = QPushButton("⬡ Microline [F1]")
-        ml_btn.setFixedHeight(28)
-        ml_btn.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
-        ml_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        ml_btn.setStyleSheet(f"""
-            QPushButton {{
-                background: {C.PRI_GHO}; color: {C.MICRO_PRI};
-                border: 1px solid {C.MICRO_PRI}44; border-radius: 3px;
-            }}
-            QPushButton:hover {{ background: {C.MICRO_PRI}22; border: 1px solid {C.MICRO_PRI}; }}
-        """)
-        ml_btn.clicked.connect(lambda: self._launch_agent("microline"))
-        agents_row.addWidget(ml_btn)
-
-        ah_btn = QPushButton("✎ Assign [F2]")
-        ah_btn.setFixedHeight(28)
-        ah_btn.setFont(QFont("Courier New", 7, QFont.Weight.Bold))
-        ah_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        ah_btn.setStyleSheet(f"""
-            QPushButton {{
-                background: {C.PRI_GHO}; color: {C.ASSIGN_PRI};
-                border: 1px solid {C.ASSIGN_PRI}44; border-radius: 3px;
-            }}
-            QPushButton:hover {{ background: {C.ASSIGN_PRI}22; border: 1px solid {C.ASSIGN_PRI}; }}
-        """)
-        ah_btn.clicked.connect(lambda: self._launch_agent("assignment"))
-        agents_row.addWidget(ah_btn)
-        lay.addLayout(agents_row)
-
         fs_btn = QPushButton("⛶  FULLSCREEN  [F11]")
         fs_btn.setFixedHeight(26)
         fs_btn.setFont(QFont("Courier New", 7))
@@ -1469,254 +1203,12 @@ class MainWindow(QMainWindow):
             l.setStyleSheet(f"color: {color}; background: transparent;")
             return l
 
-        lay.addWidget(_fl("[F4] Mute  ·  [F11] Fullscreen  ·  [F1] Microline  ·  [F2] Assignment"))
+        lay.addWidget(_fl("[F4] Mute  ·  [F11] Fullscreen"))
         lay.addStretch()
-        lay.addWidget(_fl("MARK XXXIX ULTRA  ·  MULTI-AGENT SYSTEM  ·  CLASSIFIED"))
+        lay.addWidget(_fl("BRANDON'S JARVIS  ·  PERSONAL AI ASSISTANT"))
         lay.addStretch()
         lay.addWidget(_fl("© FATIHMAKES INDUSTRIES", C.PRI_DIM))
         return w
-
-    def _launch_agent(self, agent_id: str):
-        """Launch or bring-to-front an agent window, wired to the left
-        panel's status indicator and the HUD's link badges."""
-        from agents.microline_window import MicrolineWindow
-        from agents.assignment_agent import AssignmentWindow
-
-        if agent_id == "microline":
-            if "microline" not in self._agent_windows or not self._agent_windows["microline"].isVisible():
-                win = self._make_agent_window(
-                    MicrolineWindow, "microline", self._microline_status)
-                self._agent_windows["microline"] = win
-                win.show()
-                self._enter_agent_mode()
-            else:
-                self._agent_windows["microline"].raise_()
-                self._agent_windows["microline"].activateWindow()
-
-        elif agent_id == "assignment":
-            if "assignment" not in self._agent_windows or not self._agent_windows["assignment"].isVisible():
-                win = self._make_agent_window(
-                    AssignmentWindow, "assignment", self._assign_status)
-                self._agent_windows["assignment"] = win
-                win.show()
-                self._enter_agent_mode()
-            else:
-                self._agent_windows["assignment"].raise_()
-                self._agent_windows["assignment"].activateWindow()
-
-    def open_agent(self, agent_id: str):
-        """Request an agent window from any worker thread."""
-        self._agent_launch_sig.emit(agent_id)
-
-    def _make_agent_window(self, window_cls, agent_id: str, status_widget: "AgentStatusWidget"):
-        """Build an agent window, wiring status_callback/on_closed if the
-        window class supports them (keeps this file compatible with
-        older agent windows that don't accept those kwargs yet)."""
-        kwargs = dict(on_command=self._agent_command_handler)
-        try:
-            win = window_cls(
-                status_callback=lambda active, aid=agent_id: self._on_agent_status(aid, active),
-                on_closed=lambda aid=agent_id: self._on_agent_closed(aid),
-                **kwargs,
-            )
-        except TypeError:
-            # Older agent window signature — fall back gracefully, the
-            # left-panel status just won't reflect live processing state.
-            win = window_cls(**kwargs)
-        return win
-
-    def _on_agent_status(self, agent_id: str, active: bool):
-        """Real integration point: an agent window tells JARVIS it's
-        processing, and JARVIS reflects that on the left panel + HUD."""
-        widget = self._microline_status if agent_id == "microline" else self._assign_status
-        widget.set_active(active)
-
-    def _on_agent_closed(self, agent_id: str):
-        """Keep the window registry and HUD link badges in sync when the
-        user closes an agent window directly."""
-        self._agent_windows.pop(agent_id, None)
-        if agent_id == "microline":
-            self.hud.microline_linked = False
-        else:
-            self.hud.assign_linked = False
-        if not self._agent_windows:
-            self._leave_agent_mode()
-
-    def _enter_agent_mode(self):
-        if self._agent_mode:
-            return
-        self._agent_mode = True
-        self._muted_before_agents = self._muted
-        if not self._muted:
-            self._toggle_mute()
-        self._log.append_log("SYS: Specialist agent active. Main microphone muted.")
-
-    def _leave_agent_mode(self):
-        if not self._agent_mode:
-            return
-        self._agent_mode = False
-        if self._muted != self._muted_before_agents:
-            self._toggle_mute()
-        self._log.append_log("SYS: Specialist agent closed. Main microphone restored.")
-
-    def _agent_command_handler(self, agent_id: str, text: str):
-        """Route agent commands through the Gemini API."""
-        import requests
-
-        # First real message from an agent window means it's linked —
-        # reflect that on the HUD's bottom-corner indicators.
-        if agent_id == "microline":
-            self.hud.microline_linked = True
-        elif agent_id == "assignment":
-            self.hud.assign_linked = True
-
-        try:
-            core_identity = _load_core_identity()
-
-            if agent_id == "microline":
-                specialty = (
-                    "SPECIALTY: You are running as JARVIS's Microline Scientific Solutions module — "
-                    "a laboratory science, molecular biology, chemistry, spectroscopy, and research-data "
-                    "specialist. Give technically precise answers, using scientific notation where it helps. "
-                    "You are still JARVIS: keep the same voice and brevity rules above, just applied to "
-                    "scientific subject matter.\n\n"
-                    "SOURCE POLICY: For Microline company, product, service, catalog, contact, and portal "
-                    "questions, use only the supplied official Microline sources. Do not invent missing "
-                    "prices, stock, specifications, policies, people, or capabilities. If the sources do "
-                    "not contain an answer, say that clearly and recommend contacting Microline. "
-                    "Write professional summaries with a short conclusion, organized sections, and source "
-                    "URLs when relevant. Distinguish company information from general scientific knowledge.\n\n"
-                    f"CURRENT OFFICIAL MICROLINE SOURCES:\n{_microline_source_context() or '(Sources temporarily unavailable.)'}"
-                )
-            elif agent_id == "assignment":
-                specialty = (
-                    "SPECIALTY: You are running as JARVIS's Assignment Helper module — an academic tutor "
-                    "covering essays, research, citations, mathematics, and coursework. Be clear and "
-                    "structured, and help the user actually learn the material rather than just handing "
-                    "over answers. You are still JARVIS: keep the same voice and brevity rules above, just "
-                    "applied to academic subject matter."
-                )
-            else:
-                specialty = (
-                    f"SPECIALTY: You are running as JARVIS's '{agent_id}' module. Stay in the same voice "
-                    "and brevity rules above for this domain."
-                )
-
-            system = f"{core_identity}\n\n{specialty}"
-
-            with self._agent_history_lock:
-                history = self._agent_histories.setdefault(agent_id, [])
-                history.append({"role": "user", "parts": [{"text": text}]})
-                request_history = list(history[-12:])
-
-            providers = [
-                ("OpenRouter", self._request_openrouter),
-                ("Gemini", self._request_gemini),
-            ]
-            failures = []
-            for provider_name, request in providers:
-                try:
-                    answer = request(system, request_history, requests)
-                    if answer:
-                        with self._agent_history_lock:
-                            self._agent_histories[agent_id].append(
-                                {"role": "model", "parts": [{"text": answer}]}
-                            )
-                        return answer
-                except Exception as provider_error:
-                    failures.append(f"{provider_name}: {provider_error}")
-            answer = self._offline_agent_response(agent_id, text, "; ".join(failures))
-            with self._agent_history_lock:
-                self._agent_histories[agent_id].append(
-                    {"role": "model", "parts": [{"text": answer}]}
-                )
-            return answer
-        except Exception as e:
-            answer = self._offline_agent_response(agent_id, text, str(e))
-            with self._agent_history_lock:
-                self._agent_histories.setdefault(agent_id, []).append(
-                    {"role": "model", "parts": [{"text": answer}]}
-                )
-            return answer
-
-    def _request_openrouter(self, system: str, history: list[dict[str, object]], requests) -> str:
-        api_key = self._get_api_key("openrouter_api_key", "OPENROUTER_API_KEY")
-        if not api_key:
-            raise RuntimeError("API key not configured")
-        messages = [{"role": "system", "content": system}]
-        for turn in history:
-            parts = turn.get("parts", [])
-            content = " ".join(str(part.get("text", "")) for part in parts if isinstance(part, dict))
-            if content:
-                role = "assistant" if turn.get("role") == "model" else str(turn.get("role", "user"))
-                messages.append({"role": role, "content": content})
-        response = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-                "HTTP-Referer": "https://microlinescientific.com",
-                "X-Title": "JARVIS Microline Agent",
-            },
-            json={"model": "openai/gpt-4o-mini", "messages": messages, "max_tokens": 1024},
-            timeout=30,
-        )
-        if not response.ok:
-            try:
-                detail = response.json().get("error", {}).get("message", "")
-            except (ValueError, TypeError):
-                detail = ""
-            suffix = f": {detail[:160]}" if detail else ""
-            raise RuntimeError(f"HTTP {response.status_code}{suffix}")
-        choices = response.json().get("choices", [])
-        return str(choices[0].get("message", {}).get("content", "")).strip() if choices else ""
-
-    def _request_gemini(self, system: str, history: list[dict[str, object]], requests) -> str:
-        api_key = self._get_api_key("gemini_api_key", "GEMINI_API_KEY")
-        if not api_key:
-            raise RuntimeError("API key not configured")
-        response = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/{_GEMINI_MODEL}:generateContent?key={api_key}",
-            json={
-                "system_instruction": {"parts": [{"text": system}]},
-                "contents": history,
-                "generationConfig": {"maxOutputTokens": 1024},
-            },
-            timeout=30,
-        )
-        if not response.ok:
-            raise RuntimeError(f"HTTP {response.status_code}")
-        candidates = response.json().get("candidates", [])
-        parts = candidates[0].get("content", {}).get("parts", []) if candidates else []
-        return "".join(str(part.get("text", "")) for part in parts).strip()
-
-    def _offline_agent_response(self, agent_id: str, text: str, reason: str) -> str:
-        """Keep the agent conversational when its hosted model is unavailable."""
-        if agent_id == "microline":
-            source = _microline_source_context(max_pages=4)
-            source_note = "Official Microline sources are currently available." if source else "Official sources are temporarily unavailable."
-            return (
-                "I’m still connected, but my hosted reasoning service is temporarily unavailable "
-                f"({reason}). {source_note} Please ask a Microline company, product, or portal question "
-                "and I will continue with verified source material, or update the Gemini API quota/key "
-                "for full scientific conversation."
-            )
-        return (
-            "I’m still connected, but my hosted reasoning service is temporarily unavailable "
-            f"({reason}). Your message has been received. Please restore the Gemini API quota/key "
-            "to continue the full academic conversation."
-        )
-
-    def _get_api_key(self, config_name: str, env_name: str) -> str:
-        """Get a provider key from config first, then the environment."""
-        try:
-            cfg = json.loads(API_FILE.read_text(encoding="utf-8"))
-            return cfg.get(config_name, "") or os.environ.get(env_name, "")
-        except Exception:
-            return os.environ.get(env_name, "")
-
-    def _get_gemini_key(self) -> str:
-        return self._get_api_key("gemini_api_key", "GEMINI_API_KEY")
 
     def _quick_cmd(self, cmd: str):
         if self.on_text_command:
@@ -1837,8 +1329,7 @@ class MainWindow(QMainWindow):
         if self._overlay:
             self._overlay.hide(); self._overlay = None
         self._apply_state("LISTENING")
-        self._log.append_log(f"SYS: Initialised. OS={os_name.upper()}. JARVIS ULTRA online.")
-        self._log.append_log("SYS: Press F1 for Microline  ·  F2 for Assignment Helper")
+        self._log.append_log(f"SYS: Initialised. OS={os_name.upper()}. Brandon's JARVIS online.")
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -1887,9 +1378,6 @@ class JarvisUI:
 
     def write_log(self, text: str):
         self._win._log_sig.emit(text)
-
-    def open_agent(self, agent_id: str):
-        self._win.open_agent(agent_id)
 
     def wait_for_api_key(self):
         while not self._win._ready:
